@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product</title>
+</head>
+<body>
+    <h1>Create Product</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %} 
+        {{ form.as_p }} <!--widget tweaks-->
+        <!-- {{ form.name }} -->
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'product-list' %}">Back to Product List</a>
+</body>
+</html>
+<!-- Update , delete view, design -->
+<!-- Permissions - create view only visible for admin or it show error for other users -->
