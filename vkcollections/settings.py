@@ -130,3 +130,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'users.User'
+
+LOGIN_URL = '/users/login/'
+
+LOGIN_REDIRECT_URL = '/users/dashboard/'
+LOGOUT_REDIRECT_URL = '/users/login/'  # Adjust to your login URL
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'sibis2k3@gmail.com'  # Replace with your email
+EMAIL_HOST_PASSWORD = 'mwfj vhyt wlsu yfqe'  # Replace with your email password
+
