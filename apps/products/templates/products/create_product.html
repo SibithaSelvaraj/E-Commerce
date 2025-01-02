@@ -1,20 +1,81 @@
+<!-- create_product.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Product</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Create Product</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %} 
-        {{ form.as_p }} <!--widget tweaks-->
-        <!-- {{ form.name }} -->
-        <button type="submit">Save</button>
-    </form>
-    <a href="{% url 'product-list' %}">Back to Product List</a>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96 max-w-2xl">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Create Product</h1>
+            
+            <form method="post" enctype="multipart/form-data" class="space-y-4">
+                {% csrf_token %}
+
+                <!-- Name Field -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Name</label>
+                    {{ form.name }}
+                </div>
+
+                <!-- Description Field -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Description</label>
+                    {{ form.description }}
+                </div>
+
+                <!-- Slug Field -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Slug</label>
+                    {{ form.slug }}
+                </div>
+
+                <!-- Price Field -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Price</label>
+                    {{ form.price }}
+                </div>
+
+                <!-- Stock Field -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Stock</label>
+                    {{ form.stock }}
+                </div>
+
+                <!-- Category Dropdown and New Category Input -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Category</label>
+                    {{ form.category }}
+                </div>
+
+                <!-- Image Field -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Image</label>
+                    {{ form.image }}
+                </div>
+
+                <!-- Is Active Checkbox -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Is Active</label>
+                    {{ form.is_active }}
+                </div>
+
+                <!-- Submit and Cancel Buttons -->
+                <div class="flex justify-center mt-4">
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Save</button>
+                    <a href="{% url 'product-list' %}" class="ml-4 bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
+
 </html>
+
 <!-- Update , delete view, design -->
 <!-- Permissions - create view only visible for admin or it show error for other users -->
+ <!--widget tweaks-->
+        <!-- {{ form.name }} -->

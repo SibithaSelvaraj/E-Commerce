@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- First Division -->
+    <header class="flex justify-between items-center bg-gray-800 text-white p-4">
+        <div class="text-2xl font-bold">VK Collections</div>
+        <form method="POST" action="{% url 'logout' %}" class="">
+            {% csrf_token %}
+            <button type="submit" class="bg-white text-gray-500 px-4 py-2 rounded">Logout</button>
+        </form>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-200 p-4">
+        <ul class="flex space-x-4">
+            <li><a href="#" class="text-blue-500 hover:underline">Home</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Electronics</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Fashion</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Books</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Second Division: Products -->
+<main class="p-4">
+    <h2 class="text-xl font-bold mb-4">Products</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for product in products %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-48 object-cover">
+                {% else %}
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-500">No Image</span>
+                    </div>
+                {% endif %}
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-gray-800">{{ product.name }}</h3>
+                    <p class="text-gray-600 mb-2">{{ product.description }}</p>
+                    <p class="text-gray-700 font-medium">Price: ${{ product.price }}</p>
+                    <p class="text-gray-700 font-medium">Stock: {{ product.stock }}</p>
+                    <p class="text-gray-700 font-medium">Category: {{ product.category.name }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</main>
+
+
+    <!-- Third Division: Contact and Google Map -->
+    <section class="grid grid-cols-2 gap-4 p-4">
+        <!-- Contact Form -->
+        <div class="bg-white shadow p-4 rounded">
+            <h2 class="text-xl font-bold mb-4">Contact Us</h2>
+            <form>
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium">Name</label>
+                    <input type="text" id="name" name="name" class="w-full border border-gray-300 p-2 rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium">Email</label>
+                    <input type="email" id="email" name="email" class="w-full border border-gray-300 p-2 rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="message" class="block text-sm font-medium">Message</label>
+                    <textarea id="message" name="message" rows="4" class="w-full border border-gray-300 p-2 rounded"></textarea>
+                </div>
+                <button type="submit" class="bg-gray-800 text-white text-center p-2 rounded">Submit</button>
+            </form>
+        </div>
+
+        <!-- Google Map -->
+        <div class="bg-white shadow p-4 rounded">
+            <h2 class="text-xl font-bold mb-4">Find Us</h2>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345097376!2d144.95373541585695!3d-37.816279742021404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf57765c88e8f5bdb!2sGoogle!5e0!3m2!1sen!2sus!4v1637066326472!5m2!1sen!2sus"
+                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
+    </section>
+
+    <!-- Fourth Division: Footer -->
+    <footer class="bg-gray-800 text-white text-center p-4">
+        <p>&copy; 2024 VK Collections. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
