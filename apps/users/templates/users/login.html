@@ -7,19 +7,143 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
+    <!-- First Division -->
+    <header class="flex justify-between items-center bg-gray-800 text-white p-4">
+        <div class="text-2xl font-bold">VK Collections</div>
+        <div class="flex items-center space-x-4">
+                <a href="{% url 'cart' %}" class="flex">
+                    <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.2 5.8A2 2 0 008 21h8a2 2 0 001.8-2.2L17 13M5.4 5H21M16 16v2M8 16v2" />
+                    </svg><p class="text-white">&nbsp;Cart</p>
+                    <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1">
+                        {{ cart.items.count }}
+                    </span>
+                </a>
+            
+            <div class="flex items-center space-x-2 border-2 border-white px-3 py-1 rounded-lg relative group">
+                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10.94 10.94 0 0112 16c2.985 0 5.735 1.165 7.879 3.034M12 14a4 4 0 100-8 4 4 0 000 8z" />
+                </svg>
+                <p class="text-white">{{ user.get_username }}</p>
+                <!-- Dropdown with Tailwind -->
+                <div class="relative">
+                    <!-- Profile Icon and Dropdown Toggle -->
+                    <button class="flex items-center space-x-2 p-0 text-white" aria-expanded="false" onclick="toggleDropdown()">
+                        <i class="bi bi-person-circle text-xl"></i>
+                        <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <ul id="profileDropdown" class="absolute right-0 hidden mt-2 space-y-2 bg-white text-black rounded-lg shadow-lg w-40 z-10">
+                        <li>
+                            <a href="#" class="block px-4 py-2 text-sm hover:font-semibold">
+                                <i class="bi bi-cart-fill me-1"></i> Orders
+                            </a>
+                        </li>
+                        <li>
+                            <form action="{% url 'logout' %}" method="post" class="dropdown-item">
+                                {% csrf_token %}
+                                <button type="submit" class="block px-4 py-2 text-sm text-red-500 hover:font-semibold">
+                                    <i class="bi bi-cart-fill me-1 "></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-200 p-4">
+        <ul class="flex space-x-4">
+            <li><a href="#" class="text-blue-500 hover:underline">Home</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Electronics</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Fashion</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Books</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Contact Us</a></li>
+        </ul>
+    </nav>
+
     <div class="flex justify-center items-center min-h-screen">
         <div class="bg-white p-8 rounded shadow w-full max-w-md">
             <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
             <form method="post" class="space-y-4">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">Login</button>
+                
+                <!-- Username Field -->
+                <div class="space-y-2">
+                    <label for="{{ form.username.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                        Username
+                    </label>
+                    <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                        placeholder="username" value="{{ form.username.value|default_if_none:'' }}">
+                    {% if form.username.errors %}
+                    <p class="text-red-500 text-sm">{{ form.username.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Password Field -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="{{ form.password.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                            Password
+                        </label>
+                        <a href="{% url 'password_reset' %}" class="text-blue-600 text-sm hover:text-blue-500">
+                            Forgot password?
+                        </a>
+                    </div>
+                    <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                        placeholder="••••••••">
+                    {% if form.password.errors %}
+                    <p class="text-red-500 text-sm">{{ form.password.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full bg-gray-700 text-white py-2 rounded hover:bg-gray-800">
+                    Login
+                </button>
             </form>
-            <div class="text-sm mt-4 text-center">
-                <p>Don't have an account? <a href="{% url 'register' %}" class="text-blue-500">Register</a></p>
-                <p class="mt-2"><a href="{% url 'password_reset' %}" class="text-blue-500">Forgot Password?</a></p>
-            </div>
+
+            <!-- Additional Links -->
+            <p class="text-sm mt-4 text-center">
+                Don't have an account? <a href="{% url 'register' %}" class="text-blue-500">Register</a>
+            </p>
         </div>
     </div>
 </body>
 </html>
+
+<!-- 
+div class="space-y-2">
+                <label for="{{ form.username.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                    Username
+                </label>
+                <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Choose a username">
+                {% if form.username.errors %}
+                <p class="text-red-500 text-sm">{{ form.username.errors.0 }}</p>
+                {% endif %}
+            </div>
+<div class="space-y-2">
+    <div class="flex justify-between items-center">
+        <label for="{{ form.password.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+            Password
+        </label>
+        <a href="{% url 'password_reset' %}" class="text-blue-600 text-sm hover:text-blue-500">
+            Forgot password?
+        </a>
+    </div>
+    <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder="••••••••">
+    {% if form.password.errors %}
+    <p class="text-red-500 text-sm">{{ form.password.errors.0 }}</p>
+    {% endif %}
+</div> -->

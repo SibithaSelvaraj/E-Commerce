@@ -1,4 +1,3 @@
-<!-- create_product.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,64 +15,127 @@
                 {% csrf_token %}
 
                 <!-- Name Field -->
-                <div>
-                    <label class="block text-gray-700 text-sm font-medium mb-2">Name</label>
-                    {{ form.name }}
+                <div class="space-y-2">
+                    <label for="{{ form.name.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                        Name
+                    </label>
+                    <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                        placeholder="Enter product name">
+                    {% if form.name.errors %}
+                    <p class="text-red-500 text-sm">{{ form.name.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Description Field -->
-                <div>
-                    <label class="block text-gray-700 text-sm font-medium mb-2">Description</label>
-                    {{ form.description }}
+                <div class="space-y-2">
+                    <label for="{{ form.description.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                        Description
+                    </label>
+                    <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                        placeholder="Enter product description"></textarea>
+                    {% if form.description.errors %}
+                    <p class="text-red-500 text-sm">{{ form.description.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Slug Field -->
-                <div>
-                    <label class="block text-gray-700 text-sm font-medium mb-2">Slug</label>
-                    {{ form.slug }}
+                <div class="space-y-2">
+                    <label for="{{ form.slug.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                        Slug
+                    </label>
+                    <input type="text" name="{{ form.slug.name }}" id="{{ form.slug.id_for_label }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                        placeholder="Enter product slug">
+                    {% if form.slug.errors %}
+                    <p class="text-red-500 text-sm">{{ form.slug.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Price Field -->
-                <div>
-                    <label class="block text-gray-700 text-sm font-medium mb-2">Price</label>
-                    {{ form.price }}
+                <div class="space-y-2">
+                    <label for="{{ form.price.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                        Price
+                    </label>
+                    <input type="number" name="{{ form.price.name }}" id="{{ form.price.id_for_label }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                        placeholder="Enter product price">
+                    {% if form.price.errors %}
+                    <p class="text-red-500 text-sm">{{ form.price.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Stock Field -->
-                <div>
-                    <label class="block text-gray-700 text-sm font-medium mb-2">Stock</label>
-                    {{ form.stock }}
+                <div class="space-y-2">
+                    <label for="{{ form.stock.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                        Stock
+                    </label>
+                    <input type="number" name="{{ form.stock.name }}" id="{{ form.stock.id_for_label }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                        placeholder="Enter product stock">
+                    {% if form.stock.errors %}
+                    <p class="text-red-500 text-sm">{{ form.stock.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
-                <!-- Category Dropdown and New Category Input -->
-                <div>
-                    <label class="block text-gray-700 text-sm font-medium mb-2">Category</label>
-                    {{ form.category }}
+                <!-- Category Dropdown -->
+                <div class="space-y-2">
+                    <label for="{{ form.category.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                        Category
+                    </label>
+                    <select name="{{ form.category.name }}" id="{{ form.category.id_for_label }}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                        {% for choice in form.category.field.choices %}
+                        <option value="{{ choice.0 }}" {% if choice.0 == form.category.value %}selected{% endif %}>
+                            {{ choice.1 }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    {% if form.category.errors %}
+                    <p class="text-red-500 text-sm">{{ form.category.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Image Field -->
-                <div>
-                    <label class="block text-gray-700 text-sm font-medium mb-2">Image</label>
-                    {{ form.image }}
+                <div class="space-y-2">
+                    <label for="{{ form.image.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                        Image
+                    </label>
+                    <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}"
+>                    {% if form.image.errors %}
+                    <p class="text-red-500 text-sm">{{ form.image.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Is Active Checkbox -->
-                <div>
-                    <label class="block text-gray-700 text-sm font-medium mb-2">Is Active</label>
-                    {{ form.is_active }}
+                <div class="space-y-2">
+                    <label for="{{ form.is_active.id_for_label }}" class="block text-gray-700 text-sm font-medium">
+                        Is Active
+                    </label>
+                    <input type="checkbox" name="{{ form.is_active.name }}" id="{{ form.is_active.id_for_label }}"
+                        class="w-4 h-4 text-blue-500 border-gray-300 rounded ">
+                    {% if form.is_active.errors %}
+                    <p class="text-red-500 text-sm">{{ form.is_active.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
                 <!-- Submit and Cancel Buttons -->
                 <div class="flex justify-center mt-4">
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Save</button>
-                    <a href="{% url 'product-list' %}" class="ml-4 bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600">Cancel</a>
+                    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                        Save
+                    </button>
+                    <a href="{% url 'product-list' %}" class="ml-4 bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600">
+                        Cancel
+                    </a>
                 </div>
             </form>
         </div>
     </div>
 </body>
-
 </html>
+
+
 
 <!-- Update , delete view, design -->
 <!-- Permissions - create view only visible for admin or it show error for other users -->

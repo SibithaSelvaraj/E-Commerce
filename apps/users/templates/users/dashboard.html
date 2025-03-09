@@ -7,32 +7,73 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-    <!-- First Division -->
-    <header class="flex justify-between items-center bg-gray-800 text-white p-4">
-        <div class="text-2xl font-bold">VK Collections</div>
-        <form method="POST" action="{% url 'logout' %}" class="">
-            {% csrf_token %}
-            <button type="submit" class="bg-white text-gray-500 px-4 py-2 rounded">Logout</button>
-        </form>
-    </header>
+<!-- First Division -->
+<header class="flex justify-between items-center bg-gray-800 text-white p-4">
+    <div class="text-2xl font-bold">VK Collections</div>
+    <div class="flex items-center space-x-4">
+        <!-- <div class="flex items-center space-x-2 border-2 border-white px-3 py-1 rounded-lg relative group"> -->
+            <a href="{% url 'cart' %}" class="flex">
+                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.2 5.8A2 2 0 008 21h8a2 2 0 001.8-2.2L17 13M5.4 5H21M16 16v2M8 16v2" />
+                </svg><p class="text-white">&nbsp;Cart</p>
+                <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1">
+                    {{ cart.items.count }}
+                </span>
+            </a>
+        <!-- </div> -->
+        <div class="flex items-center space-x-2 border-2 border-white px-3 py-1 rounded-lg relative group">
+            <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10.94 10.94 0 0112 16c2.985 0 5.735 1.165 7.879 3.034M12 14a4 4 0 100-8 4 4 0 000 8z" />
+            </svg>
+            <p class="text-white">{{ user.get_username }}</p>
+            <!-- Dropdown with Tailwind -->
+            <div class="relative">
+                <!-- Profile Icon and Dropdown Toggle -->
+                <button class="flex items-center space-x-2 p-0 text-white" aria-expanded="false" onclick="toggleDropdown()">
+                    <i class="bi bi-person-circle text-xl"></i>
+                    <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
 
-    <!-- Navigation Bar -->
-    <nav class="bg-gray-200 p-4">
-        <ul class="flex space-x-4">
-            <li><a href="#" class="text-blue-500 hover:underline">Home</a></li>
-            <li><a href="#" class="text-blue-500 hover:underline">Electronics</a></li>
-            <li><a href="#" class="text-blue-500 hover:underline">Fashion</a></li>
-            <li><a href="#" class="text-blue-500 hover:underline">Books</a></li>
-            <li><a href="#" class="text-blue-500 hover:underline">Contact Us</a></li>
-        </ul>
-    </nav>
+                <!-- Dropdown Menu -->
+                <ul id="profileDropdown" class="absolute right-0 hidden mt-2 space-y-2 bg-white text-black rounded-lg shadow-lg w-40 z-10">
+                    <li>
+                        <a href="{% url 'orders:my_orders' %}" class="block px-4 py-2 text-sm hover:font-semibold">
+                            <i class="bi bi-cart-fill me-1"></i> My Orders
+                        </a>
+                    </li>
+                    <li>
+                        <form action="{% url 'logout' %}" method="post" class="dropdown-item">
+                            {% csrf_token %}
+                            <button type="submit" class="block px-4 py-2 text-sm text-red-500 hover:font-semibold">
+                                <i class="bi bi-cart-fill me-1 "></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Navigation Bar -->
+<nav class="bg-gray-200 p-4">
+    <ul class="flex space-x-4">
+        <li><a href="{% url 'dashboard' %}" class="text-blue-500 hover:underline">Home</a></li>
+        <li><a href="#" class="text-blue-500 hover:underline">Electronics</a></li>
+        <li><a href="#" class="text-blue-500 hover:underline">Fashion</a></li>
+        <li><a href="#" class="text-blue-500 hover:underline">Books</a></li>
+        <li><a href="#" class="text-blue-500 hover:underline">Contact Us</a></li>
+    </ul>
+</nav>
+
 
     <!-- Second Division: Products -->
 <main class="p-4">
     <h2 class="text-xl font-bold mb-4">Products</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {% for product in products %}
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <a href="{% url 'product-detail' product.pk %}" class="bg-white rounded-lg shadow-lg overflow-hidden">
                 {% if product.image %}
                     <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-48 object-cover">
                 {% else %}
@@ -43,15 +84,14 @@
                 <div class="p-4">
                     <h3 class="text-lg font-bold text-gray-800">{{ product.name }}</h3>
                     <p class="text-gray-600 mb-2">{{ product.description }}</p>
-                    <p class="text-gray-700 font-medium">Price: ${{ product.price }}</p>
+                    <p class="text-gray-700 font-medium">Price: Rs.{{ product.price }}</p>
                     <p class="text-gray-700 font-medium">Stock: {{ product.stock }}</p>
                     <p class="text-gray-700 font-medium">Category: {{ product.category.name }}</p>
                 </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
 </main>
-
 
     <!-- Third Division: Contact and Google Map -->
     <section class="grid grid-cols-2 gap-4 p-4">
