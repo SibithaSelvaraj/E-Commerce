@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- First Division -->
+    <header class="flex justify-between items-center bg-gray-800 text-white p-4">
+        <div class="text-2xl font-bold">VK Collections</div>
+        <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2 border-2 border-white px-3 py-1 rounded-lg relative group">
+                <a href="{% url 'cart' %}" class="flex">
+                    <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.2 5.8A2 2 0 008 21h8a2 2 0 001.8-2.2L17 13M5.4 5H21M16 16v2M8 16v2" />
+                    </svg><p class="text-white">&nbsp;Cart</p>
+                    <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1">
+                        {{ cart.items.count }}
+                    </span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-2 border-2 border-white px-3 py-1 rounded-lg relative group">
+                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10.94 10.94 0 0112 16c2.985 0 5.735 1.165 7.879 3.034M12 14a4 4 0 100-8 4 4 0 000 8z" />
+                </svg>
+                <p class="text-white">{{ user.get_username }}</p>
+                <!-- Dropdown with Tailwind -->
+                <div class="relative">
+                    <!-- Profile Icon and Dropdown Toggle -->
+                    <button class="flex items-center space-x-2 p-0 text-white" aria-expanded="false" onclick="toggleDropdown()">
+                        <i class="bi bi-person-circle text-xl"></i>
+                        <svg class="w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <ul id="profileDropdown" class="absolute right-0 hidden mt-2 space-y-2 bg-white text-black rounded-lg shadow-lg w-40 z-10">
+                        <li>
+                            <a href="#" class="block px-4 py-2 text-sm hover:font-semibold">
+                                <i class="bi bi-cart-fill me-1"></i> Orders
+                            </a>
+                        </li>
+                        <li>
+                            <form action="{% url 'logout' %}" method="post" class="dropdown-item">
+                                {% csrf_token %}
+                                <button type="submit" class="block px-4 py-2 text-sm text-red-500 hover:font-semibold">
+                                    <i class="bi bi-cart-fill me-1 "></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-200 p-4">
+        <ul class="flex space-x-4">
+            <li><a href="{% url 'dashboard' %}" class="text-blue-500 hover:underline">Home</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Electronics</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Fashion</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Books</a></li>
+            <li><a href="#" class="text-blue-500 hover:underline">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Cart Section -->
+    <div class="container mx-auto mt-10 p-5">
+        <h1 class="text-2xl font-bold mb-4 text-gray-800">Your Cart</h1>
+        {% if cart_items %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white shadow-lg rounded-lg">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 bg-gray-200">Product Name</th>
+                            <th class="py-2 px-4 bg-gray-200">Unit Price</th>
+                            <th class="py-2 px-4 bg-gray-200">Quantity</th>
+                            <th class="py-2 px-4 bg-gray-200">Total Price</th>
+                            <th class="py-2 px-4 bg-gray-200">Stock Availability</th>
+                            <th class="py-2 px-4 bg-gray-200">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                            <tr>
+                                <td class="py-4 px-5 flex items-center space-x-4">
+                                    {% if item.product.image.url %}
+                                        <img src="{{ item.product.image.url }}" alt="Product Image" class="h-12 w-12 object-cover rounded-full">
+                                    {% else %}
+                                        <div class="h-12 w-12 bg-gray-300 rounded"></div>
+                                    {% endif %}
+                                    <span class="text-gray-800">{{ item.product.name }}</span>
+                                </td>
+                                <td class="border py-2 px-4">Rs.{{ item.product.price }}</td>
+                                <td class="border py-2 px-4">
+                                    <form method="POST" action="{% url 'update-quantity' item.product.id %}">
+                                        {% csrf_token %}
+                                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="border rounded w-16 text-center">
+                                        <button type="submit" class="ml-2 bg-blue-500 text-white px-2 py-1 rounded">Update</button>
+                                    </form>
+                                </td>
+                                <td class="border py-2 px-4">Rs.{{ item.total_price|floatformat:2 }}</td>
+                                <td class="border py-2 px-4">{{ item.product.stock|yesno:"In Stock,Out of Stock" }}</td>
+                                <td class="border py-2 px-4">
+                                    <a href="{% url 'remove-from-cart' item.product.id %}" class="text-red-500 hover:underline">Remove</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- Cart Summary -->
+            <div class="mt-10 p-5 bg-white shadow-lg rounded-lg">
+                <h2 class="text-xl font-bold text-gray-800">Cart Summary</h2>
+                <p class="text-gray-700 font-medium mt-2">Subtotal: Rs.{{ subtotal }}</p>
+                <p class="text-gray-700 font-medium mt-2">Taxes: Rs.{{ taxes|floatformat:2 }}</p>
+                <p class="text-gray-700 font-medium mt-2">Shipping: Rs.{{ shipping }}</p>
+                <p class="text-gray-700 font-medium mt-2">Total amount: Rs.{{ total_amount|floatformat:2 }}</p>
+                <div class="mt-6 flex space-x-4">
+                    <a href="{% url 'checkout' order_id=order.id %}" class="bg-blue-500 text-white px-4 py-2 rounded">Proceed to Checkout</a>
+                    <a href="{% url 'dashboard' %}" class="bg-gray-500 text-white px-4 py-2 rounded">Continue Shopping</a>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-gray-600">Your cart is empty.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+
